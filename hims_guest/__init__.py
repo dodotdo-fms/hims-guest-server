@@ -25,14 +25,14 @@ socketio = SocketIO(app, async_mode=async_mode, binary=True, ping_timeout=15, en
 socketio.init_app(app)
 db.init_app(app)
 
-# from .api.v2.hotel.controllers import api_hotel
+from .api.v2.hotel.controllers import api_hotel
 # from .api.v2.items.controllers import api_item
 # from .api.v2.mails.controllers import api_mail
 # from .api.v2.notices.controllers import api_notice
 # from .api.v2.phones.controllers import api_phone
 # from .web.v2.views import web_view
 #
-# app.register_blueprint(api_hotel)
+app.register_blueprint(api_hotel)
 # app.register_blueprint(api_item)
 # app.register_blueprint(api_mail)
 # app.register_blueprint(api_notice)
