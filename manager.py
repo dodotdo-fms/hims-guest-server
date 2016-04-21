@@ -51,11 +51,20 @@ def testphone():
 
 
 @manager.command
+def testnotice():
+    from tests.test_notice import NoticeTestCase
+    import unittest
+    runner = unittest.TextTestRunner(failfast=True)
+    runner.run(unittest.makeSuite(NoticeTestCase))
+
+
+@manager.command
 def testall():
     cov = coverage(branch=True, omit=['venv/*', 'manager.py', 'tests/*'])
     cov.start()
 
     testphone()
+    testnotice()
     cov.stop()
     cov.save()
     print("\n\nCoverage Report:\n")
