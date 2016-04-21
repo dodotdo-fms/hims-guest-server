@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import logging
+from logging import handlers
 import os
 from pythonjsonlogger import jsonlogger
 
@@ -19,7 +20,7 @@ class Log:
     @staticmethod
     def init(logger_name='hims-logger',
              log_level='debug',
-             log_filepath='app/log/hims.log'):
+             log_filepath='hims-guest_server/log/hims.log'):
         Log.__hims_logger = logging.getLogger(logger_name)
         Log.__hims_logger.setLevel(Log.__log_level_map.get(log_level, 'warn'))
         formatter = jsonlogger.JsonFormatter('%(asctime) %(levelname) %(module) %(funcName) %(lineno) %(message)')

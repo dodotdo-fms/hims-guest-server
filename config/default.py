@@ -12,6 +12,7 @@ class Config(object):
         'jpeg': 'image/jpeg',
         'png': 'image/png'
     }
+    ROOM_FLOOR_QUOTIENT = 100  # floor = room / ROOM_FLOOR_QUOTIENT
 
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/hims_guest.db'

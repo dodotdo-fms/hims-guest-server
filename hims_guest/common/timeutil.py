@@ -17,7 +17,6 @@ def datetime_to_rfc822(dt):
         return None
     return formatdate(timegm(dt.utctimetuple()))
 
-
 def dump_datetime(value):
     if value is None:
         return None
@@ -31,3 +30,11 @@ def dump_time(value):
     if value is None:
         return None
     return value.strftime("%H:%M")
+
+
+def str_to_time(time_str):
+    """ dump string of today's time to time object"""
+    try:
+        return datetime.strptime(time_str, "%H:%M").time()
+    except:
+        return None
