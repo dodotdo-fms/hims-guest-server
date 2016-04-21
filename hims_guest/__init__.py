@@ -7,11 +7,11 @@ from flask_socketio import SocketIO
 from database import db
 
 app = Flask(__name__)
-app.config.from_object('config.default.DevelopementConfig')
+app.config.from_object('config.default.DevelopmentConfig')
 
 # logging module
 from hims_logger import Log
-log_filepath = os.path.join(app.config['ROOT_DIR'], 'log')
+log_filepath = os.path.join(app.config['ROOT_DIR'], 'hims-guest-server/log')
 Log.init(log_filepath=log_filepath, log_level=app.config['LOG_LEVEL'])
 Log.info("START HIMS SERVER")
 
@@ -29,13 +29,13 @@ from .api.v2.hotel.controllers import api_hotel
 # from .api.v2.items.controllers import api_item
 # from .api.v2.mails.controllers import api_mail
 # from .api.v2.notices.controllers import api_notice
-# from .api.v2.phones.controllers import api_phone
+from .api.v2.phones.controllers import api_phone
 # from .web.v2.views import web_view
 #
 app.register_blueprint(api_hotel)
 # app.register_blueprint(api_item)
 # app.register_blueprint(api_mail)
 # app.register_blueprint(api_notice)
-# app.register_blueprint(api_phone)
+app.register_blueprint(api_phone)
 # app.register_blueprint(web_view)
 #

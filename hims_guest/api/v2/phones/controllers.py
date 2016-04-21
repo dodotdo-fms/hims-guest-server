@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from hims_guest import db, Log
-from flask import Blueprint, request, current_app, session, jsonify
+from flask import Blueprint, request, jsonify
 from flask_restful import Resource, Api, reqparse, abort, marshal
 from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import HTTPException
@@ -13,7 +13,7 @@ from hims_guest.common.timeutil import str_to_time
 api_phone = Blueprint('phone', __name__, url_prefix='/api/v2/phones')
 phone_rest = Api(api_phone)
 
-class PhoneList(Resource):
+class PhoneItemList(Resource):
 
     def __init__(self):
         self.phone_post_parser = reqparse.RequestParser()
@@ -46,6 +46,8 @@ class PhoneList(Resource):
                 if args.room_number is not None:
                     phone.room_number = args.room_number
             else:
+                if args.name is None or args.room_number is None:
+                    abort(404, message='Wrong request, name and room_number is required')
                 phone = Phone(uuid=args.uuid, name=args.name, room_number=args.room_number)
                 db.session.add(phone)
             db.session.commit()
@@ -61,6 +63,7 @@ class PhoneList(Resource):
             return abort(503, message='SQLAlchemy error : '+str(e.message))
 
         except Exception as e:
+            print e.message
             Log.error({'message':e.message})
             return abort(500, message='Unexpected error : '+str(e.message))
 
@@ -70,7 +73,7 @@ class PhoneList(Resource):
             phone_query = []
             if floor is not None:
                 phone_query.append(Phone.floor == floor)
-            phone_list = Phone.query.filter_by(phone_query).all()
+            phone_list = Phone.query.filter(*phone_query).all()
             return marshal({'results': phone_list}, phone_list_fields)
 
         except HTTPException as e:
@@ -87,7 +90,7 @@ class PhoneList(Resource):
 
 
 
-class Phone(Resource):
+class PhoneItem(Resource):
 
     def __init__(self):
         self.phone_post_parser = reqparse.RequestParser()
@@ -156,7 +159,7 @@ class Phone(Resource):
             if phone is None:
                 abort(404, message='Phone id {} not exists'.format(phone_id))
             else:
-                db.session.remove(phone)
+                db.session.delete(phone)
                 db.session.commit()
                 return jsonify({'results': 'success'})
 
@@ -194,7 +197,7 @@ class Phone(Resource):
 
 
 
-class PhoneData(Resource):
+class PhoneDataItem(Resource):
     def delete(self, phone_id):
         try:
             phone = Phone.query.filter_by(id=phone_id).first()
@@ -217,3 +220,7 @@ class PhoneData(Resource):
             Log.error({'message':e.message})
             return abort(500, message='Unexpected error : '+str(e.message))
 
+
+phone_rest.add_resource(PhoneItemList, '')
+phone_rest.add_resource(PhoneItem, '/<phone_id>')
+phone_rest.add_resource(PhoneDataItem, '/<phone_id>/data')

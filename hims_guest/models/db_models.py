@@ -40,9 +40,9 @@ class Hotel(db.Model):
 class Phone(db.Model):
     __tablename__ = 'phone'
     id = db.Column(db.Integer, primary_key=True)
-    uuid = db.Column(db.String(128), index=True)
+    uuid = db.Column(db.String(128), index=True, unique=True)
     gcm_register_id = db.Column(db.String(128))
-    name = db.Column(db.String(64), nullable=False)
+    name = db.Column(db.String(64), nullable=False, unique=True)
     room_number = db.Column(db.String(64))
     floor = db.Column(db.String(32))
     recent_notice_timestamp = db.Column(db.DateTime)
@@ -98,7 +98,7 @@ class ItemClass(db.Model):
 class Item(db.Model):
     __tablename__ = 'item'
     id = db.Column(db.Integer, primary_key=True)
-    item_class_id = db.Column(db.Inteer, db.ForeignKey('item_class.id'), nullable=False, index=True)
+    item_class_id = db.Column(db.Integer, db.ForeignKey('item_class.id'), nullable=False, index=True)
     type = db.Column(db.String(32), nullable=False)
     title = db.Column(db.String(128), nullable=False)
     subtitle = db.Column(db.String(256))
