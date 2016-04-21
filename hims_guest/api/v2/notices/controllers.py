@@ -7,7 +7,7 @@ from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import HTTPException
 from sqlalchemy import exc, func
 from hims_guest.models.db_models import Phone, Notice
-from hims_guest.models.rest_fields import phone_fields, phone_list_fields, notice_fields, notice_list_fields
+from hims_guest.models.rest_fields import notice_fields, notice_list_fields
 from hims_guest.common.timeutil import str_to_time, str_to_date
 
 api_notice = Blueprint('notice', __name__, url_prefix='/api/v2/notices')
@@ -57,7 +57,7 @@ class NoticeItemList(Resource):
             notice_query = []
             if query_date is not None:
                 notice_query.append(func.DATE(Notice.register_timestamp) == query_date)
-            notice_list = Notice.query.filter(notice_query).all()
+            notice_list = Notice.query.filter(*notice_query).all()
             return marshal({'results': notice_list}, notice_list_fields)
 
         except HTTPException as e:
@@ -87,7 +87,7 @@ class NoticeItem(Resource):
 
     def put(self, notice_id):
         try:
-            args = self.phone_post_parser.parse_args()
+            args = self.notice_post_parser.parse_args()
             notice = Notice.query.filter_by(id=notice_id).first()
             if notice is None:
                 abort(404, message='Notice id {} not exists'.format(notice_id))
