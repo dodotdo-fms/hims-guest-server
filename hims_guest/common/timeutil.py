@@ -32,6 +32,14 @@ def dump_time(value):
     return value.strftime("%H:%M")
 
 
+def str_to_date(date_str):
+    """ dump string of today's date to date object"""
+    try:
+        return datetime.strptime(date_str, "%m/%d/%Y").date()
+    except:
+        return None
+
+
 def str_to_time(time_str):
     """ dump string of today's time to time object"""
     try:

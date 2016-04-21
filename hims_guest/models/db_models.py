@@ -150,28 +150,3 @@ class Notice(db.Model):
             'register_timestamp': datetime_to_rfc822(self.register_timestamp),
         }
 
-
-
-class NoticePhone(db.Model):
-    __tablename__ = 'notice_phone'
-    notice_id = db.Column(db.Integer, db.ForeignKey('notice.id'), primary_key=True)
-    phone_id = db.Column(db.Integer, db.ForeignKey('phone.id'), primary_key=True)
-    register_timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def __init__(self, **kwargs):
-        super(Notice, self).__init__(**kwargs)
-
-    @property
-    def serialize(self):
-        return {
-            'notice_id': self.notice_id,
-            'phone_id': self.phone_id,
-            'register_timestamp': datetime_to_rfc822(self.register_timestamp),
-        }
-
-
-
-
-
-
-

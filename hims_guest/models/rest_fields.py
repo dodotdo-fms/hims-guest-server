@@ -22,3 +22,15 @@ phone_fields = {
 phone_list_fields = {
     'results': fields.List(fields.Nested(phone_fields))
 }
+
+
+
+notice_fields = {
+    'id': fields.Integer,
+    'content': fields.String,
+    'register_timestamp': fields.DateTime,
+}
+
+notice_list_fields = {
+    'results': fields.List(fields.Nested(notice_fields))
+}
